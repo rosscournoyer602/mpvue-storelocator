@@ -63,12 +63,12 @@ export default {
     return {
       activeStore: null,
       markers: [{
-        iconPath: "/static/images/mapPin.png",
+        iconPath: "/static/images/mapPin.svg",
         id: 0,
         latitude: null,
         longitude: null,
-        width: 20,
-        height: 30
+        width: 30,
+        height: 40
       }],
       stores: [
         {
@@ -86,7 +86,7 @@ export default {
         {
           id: 2,
           data: {name: 'Pudong Store', address: '501 Yincheng Middle Rd', hours: 'Mon-Fri 9AM-5PM', phone: '11827915142'},
-          latitude: 31.235556,
+          latitude: 31.225556,
           longitude: 121.607935
       }]
     }
