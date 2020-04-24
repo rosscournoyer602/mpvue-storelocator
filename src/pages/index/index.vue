@@ -1,28 +1,39 @@
 <template>
+
   <div class="page">
+
    <map id="map" 
-   class="page__map"
-   :scale="scale"
-   :latitude="latitude"
-   :longitude="longitude"
-   show-location
-   enable-zoom="false"
-   enable-rotate="false"
-   :markers="markers"
-   @markertap="markerTap"
-   ></map>
+    class="page__map"
+    :scale="scale"
+    :latitude="latitude"
+    :longitude="longitude"
+    show-location
+    enable-zoom="false"
+    enable-rotate="false"
+    :markers="markers"
+    @markertap="markerTap"
+   >
+   </map>
+
    <div 
     v-for="(store, storeIndex) in stores" 
     :class="[activeStore === store.id ? 'page__store-info--active' : 'page__store-info']"
     :key="storeIndex" 
     @click="selectStore(store)"
    >
+
     <h2 class="page__store-info-title">{{ store.data.name }}</h2>
+
     <p class="page__store-info-field">Address: {{ store.data.address }}</p>
+
     <p class="page__store-info-field">Hours: {{ store.data.hours }}</p>
+
     <p class="page__store-info-field">Phone: {{ store.data.phone }}</p>
+
    </div>
+
   </div>
+
 </template>
 
 <script>
@@ -47,16 +58,9 @@ export default {
       }
       ]
     });
-    this.mapCtx.getRegion({
-      success(sw, ne) {
-        console.log(sw, ne)
-      }
-    })
   },
   data() {
     return {
-      latitude: "",
-      longitude: "",
       activeStore: null,
       markers: [{
         iconPath: "/static/images/mapPin.png",
@@ -93,10 +97,7 @@ export default {
       const { latitude, longitude } = tappedMarker;
       const { name, address, hours, phone } = tappedMarker.data;
       this.storeDisplay = { name, address, hours, phone };
-      const coords = { latitude, longitude }
-      this.mapCtx.translateMarker({
-
-      });
+      const coords = { latitude, longitude };
     },
     selectStore(store) {
       this.activeStore = store.id;
