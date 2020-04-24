@@ -5,16 +5,22 @@
    :scale="scale"
    :latitude="latitude"
    :longitude="longitude"
+   show-location
    enable-zoom="false"
    enable-rotate="false"
    :markers="markers"
    @markertap="markerTap"
    ></map>
-   <div v-if="storeDisplay" class="page__store-info">
-     <h2 class="page__store-info-title">{{ storeDisplay.name }}</h2>
-     <p class="page__store-info-field">Address: {{ storeDisplay.address }}</p>
-     <p class="page__store-info-field">Hours: {{ storeDisplay.hours }}</p>
-     <p class="page__store-info-field">Phone: {{ storeDisplay.phone }}</p>
+   <div 
+    v-for="(store, storeIndex) in stores" 
+    :class="[activeStore === store.id ? 'page__store-info--active' : 'page__store-info']"
+    :key="storeIndex" 
+    @click="selectStore(store)"
+   >
+    <h2 class="page__store-info-title">{{ store.data.name }}</h2>
+    <p class="page__store-info-field">Address: {{ store.data.address }}</p>
+    <p class="page__store-info-field">Hours: {{ store.data.hours }}</p>
+    <p class="page__store-info-field">Phone: {{ store.data.phone }}</p>
    </div>
   </div>
 </template>
@@ -49,39 +55,36 @@ export default {
   },
   data() {
     return {
-      scale:"",
       latitude: "",
       longitude: "",
-      storeDisplay: null,
-      markers: [
+      activeStore: null,
+      markers: [{
+        iconPath: "/static/images/mapPin.png",
+        id: 0,
+        latitude: null,
+        longitude: null,
+        width: 20,
+        height: 30
+      }],
+      stores: [
         {
-          iconPath: "/static/images/mapPin.png",
           id: 0,
           data: {name: 'Xuhui Store', address: '165 Changshu Lu', hours: 'Tue-Sat 10AM-6PM', phone: '1281791514'},
           latitude: 31.1686,
-          longitude: 121.5265,
-          width: 20,
-          height: 20,
-          markerTap: this.markerTap
+          longitude: 121.5265
         },
         {
-          iconPath: "/static/images/mapPin.png",
           id: 1,
           data: {name: 'Minhang Store', address: '66 Xianfeng Lu', hours: 'Mon-Fri 9AM-5PM', phone: '13817915142'},
           latitude: 31.1128,
-          longitude: 121.4817,
-          width: 20,
-          height: 20
+          longitude: 121.4817
         },
         {
-          iconPath: "/static/images/mapPin.png",
           id: 2,
           data: {name: 'Pudong Store', address: '501 Yincheng Middle Rd', hours: 'Mon-Fri 9AM-5PM', phone: '11827915142'},
           latitude: 31.235556,
-          longitude: 121.607935,
-          width: 20,
-          height: 20
-      }],
+          longitude: 121.607935
+      }]
     }
   },
   methods: {
@@ -91,8 +94,14 @@ export default {
       const { name, address, hours, phone } = tappedMarker.data;
       this.storeDisplay = { name, address, hours, phone };
       const coords = { latitude, longitude }
-      this.latitude = latitude;
-      this.longitude = longitude;
+      this.mapCtx.translateMarker({
+
+      });
+    },
+    selectStore(store) {
+      this.activeStore = store.id;
+      this.markers[0].latitude = store.latitude;
+      this.markers[0].longitude = store.longitude;
     }
   }
 }
@@ -109,21 +118,22 @@ export default {
   width: 100%;
 }
 .page__store-info {
-  margin-top: 30px;
+  width: 90%;
+  margin: 15px auto 0px auto;
+  box-shadow: 0px 0px 3px 1px rgba(0,0,0,0.75);
+}
+.page__store-info--active {
+  width: 90%;
+  margin: 15px auto 0px auto;
+  background-color: #dcdcdc;
+  box-shadow: 0px 0px 3px 1px rgba(0,0,0,0.75);
 }
 .page__store-info-title {
   margin-bottom: 10px;
-  font-size: 25px;
+  font-size: 18px;
 }
 .page__store-info-field {
   margin-bottom: 5rpx;
-  font-size: 18px;
-}
-.home {
-  display: inline-block;
-  margin: 100px auto;
-  padding: 5px 10px;
-  color: blue;
-  border: 1px solid blue;
+  font-size: 16px;
 }
 </style>
